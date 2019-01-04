@@ -1,14 +1,14 @@
-These files allow you to extract the simulation data from a root file, into three textfiles. The created text files will be
+These files allow you to extract the simulation data from a root file, into three text files. The created text files will be
 called XB_det_data.txt, XB_gun_vals.txt and XB_sum_of_dep_energies.txt. If any of the particles deposits less than
 90% (this value can be changed) of its energy in the detector the event is thrown away.
 
-The XB_det_data.txt contain information about how much energy that was deposited in every crystall in the detector. For example,
+The XB_det_data.txt contain information about how much energy that was deposited in every crystal in the detector. For example,
 since the XB-detector (Crystal Ball detector) will register data for 162 crystals, each event results in 162 data points.
 The text file will be formatted with space delimiter and with every row corresponding to one event. The first data point in each
 row is the deposited energy in crystal with index number, the second data point in each row is the deposited energy in
 crystal with index number two etc.
 
-The XB_gun_vals.txt file contain informaition about the energy and the direction (cosine of angle from the beam pipe or cos(theta)),
+The XB_gun_vals.txt file contain information about the energy and the direction (cosine of angle from the beam pipe or cos(theta)),
 thus this file contains the correct answer that you wish to reconstruct using the data in the XB_det_data.txt file. Each row
 contains the information for each event, and the data is formatted with space delimiter and the energy and cos(theta) for each
 particle are printed in pairs. Thus for an event with two particles, called 1, 2 and 3, the output would be:
@@ -33,4 +33,4 @@ and the required txt-files should be generated.
 
 The h102.C- and h102.h-files are deleted after process is finished.
 
-The supported detectors are XB and DALI2 (DALI2 is just called DALI in the scirpts).
+The supported detectors are XB and DALI2 (DALI2 is just called DALI in the scripts).
