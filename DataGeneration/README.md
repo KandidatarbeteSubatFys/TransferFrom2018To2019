@@ -3,7 +3,7 @@ called XB_det_data.txt, XB_gun_vals.txt and XB_sum_of_dep_energies.txt. If any o
 90% (this value can be changed) of its energy in the detector the event is thrown away.
 
 The XB_det_data.txt contain information about how much energy that was deposited in every crystall in the detector. For example,
-since the XB-detector (Crystal Ball detector) will register data for 162 crystals, so for each event one get 162 data points.
+since the XB-detector (Crystal Ball detector) will register data for 162 crystals, each event results in 162 data points.
 The text file will be formatted with space delimiter and with every row corresponding to one event. The first data point in each
 row is the deposited energy in crystal number one for that event, the second data point in each row is the deposited energy in
 crystal number two etc.
