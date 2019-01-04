@@ -5,8 +5,8 @@ called XB_det_data.txt, XB_gun_vals.txt and XB_sum_of_dep_energies.txt. If any o
 The XB_det_data.txt contain information about how much energy that was deposited in every crystall in the detector. For example,
 since the XB-detector (Crystal Ball detector) will register data for 162 crystals, each event results in 162 data points.
 The text file will be formatted with space delimiter and with every row corresponding to one event. The first data point in each
-row is the deposited energy in crystal number one for that event, the second data point in each row is the deposited energy in
-crystal number two etc.
+row is the deposited energy in crystal with index number, the second data point in each row is the deposited energy in
+crystal with index number two etc.
 
 The XB_gun_vals.txt file contain informaition about the energy and the direction (cosine of angle from the beam pipe or cos(theta)),
 thus this file contains the correct answer that you wish to reconstruct using the data in the XB_det_data.txt file. Each row
