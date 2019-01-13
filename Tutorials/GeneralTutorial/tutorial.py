@@ -5,6 +5,7 @@ import sys # used for taking arguments when running script
 from matplotlib.colors import LogNorm # useful norm for density plots
 
 
+
 def gen_sub_set(batch_size, batch_x, batch_y):
     if not len(batch_x) == len(batch_y):
         raise ValueError('Lists most be of same length')
