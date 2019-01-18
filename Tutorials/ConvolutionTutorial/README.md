@@ -1,1 +1,1 @@
-Information on how to use the convolution_tutorial.py script is in the pdf file.
+Information on how to do the tutorial is in the pdf file.
