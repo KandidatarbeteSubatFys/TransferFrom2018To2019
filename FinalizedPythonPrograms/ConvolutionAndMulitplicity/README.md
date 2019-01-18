@@ -1,6 +1,6 @@
 These are scripts used for reconstructing the multplicity of events, where convolution is used in most cases. The scripts
 are not well commented and can be difficult to use as an outsider. We instead recommend looking at the convolution tutorial in the
-ConvolutionTutorial folder, and then perhaps using bits of the scripts here to make you're own programs.
+ConvolutionTutorial folder, and then perhaps using bits of the scripts here to make your own programs.
 
 Brief info on the scripts:
 
