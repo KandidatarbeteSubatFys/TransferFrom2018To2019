@@ -11,7 +11,7 @@ DataGeneration - Contains necessary scripts to extract data for the neural netwo
 FinalizedPythonPrograms - Contains programs that was used in the end of our project to generate the results in the report.
                           We do not guarantee any user-friendly experience in this directory.
 
-Kebnekaise - Contains scripts on how to submit python scripts utilizing TensorFlow to the computing centre Kebnekaise.
+Kebnekaise - Contains scripts on how to submit scripts to the computing centre Kebnekaise.
 
 Tutorials - Contains two tutorial which consists of pdf documents as well as python scripts. The "general tutorial" starts from the
 beginning with data generation, and finishes with a complete (yet simple) network.
