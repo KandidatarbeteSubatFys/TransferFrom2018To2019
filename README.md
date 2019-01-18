@@ -4,7 +4,7 @@ corresponding project group in 2018, as well as a basic tutorial on the fundamen
 
 For an overview on how to use the repository, see the Kandidat19_Komma_ig_ng.pdf.
 
-Short description on what the different directories contain:
+### Short description on what the different directories contain:
 
 DataGeneration - Contains necessary scripts to extract data for the neural networks from root files into text files.
 
