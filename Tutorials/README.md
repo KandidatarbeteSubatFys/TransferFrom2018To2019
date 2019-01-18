@@ -1,5 +1,4 @@
-It is advicable to read the Kandidat19_Komma_igång document that we have shared with the new
-group, before starting with any tutorial. When that is done we recommend looking at the GenerelTutorial folder first, where the
+It is advicable to read the Kandidat19_Komma_igång document before starting with any tutorial. When that is done we recommend looking at the GenerelTutorial folder first, where the
 comments in tutorial.py is  particulary intended to give an overview of how the neural networks in this project might be
 constructed. It also contain information on how to generate data in ggland.
 
