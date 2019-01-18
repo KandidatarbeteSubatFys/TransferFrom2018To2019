@@ -1,4 +1,4 @@
-These are the scripts necessary for running a python script (with the tensorflow module implemented) on the computing center kebnekaise.
+These are the scripts necessary for running a python script (with the tensorflow module implemented) on the computing center kebnekaise. Note that matplotlib wasn't possible to use on kebnekaise when we tried it last year, but maybe thay have fixed it now.
 
 Place the scripts in the same folder on the kebnekaise file system. In job_script.sh, you specify the python script/scripts you want to run. In time.sbatch you specify the maximum time that the script is allowed to run. Then you type:
 
