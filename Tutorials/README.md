@@ -5,4 +5,4 @@ constructed. It also contain information on how to generate data in ggland.
 
 After the potential of the fully connected networked appear to have been reached, we then recommend checking out the tutorial on
 convolution. The convolution method we used is a bit more time consuming to implement than the fully connected ones, but hopefully
-the tutorial will make it a bit clearer how the method works.
+the tutorial will make it a bit clearer how our method works.
