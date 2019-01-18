@@ -5,7 +5,7 @@ import sys # used for taking arguments when running script
 from matplotlib.colors import LogNorm # useful norm for density plots
 
 
-
+# Return a randomly selected subset of batch_x and batch_y with length batch_size.
 def gen_sub_set(batch_size, batch_x, batch_y):
     if not len(batch_x) == len(batch_y):
         raise ValueError('Lists most be of same length')
@@ -13,6 +13,7 @@ def gen_sub_set(batch_size, batch_x, batch_y):
     return batch_x[indices], batch_y[indices]
 
 
+# Returns the data in the textfile file, where you have to specify the number of data values per row
 def read_data(file, columns):
     rows = file_len(file)
     out = np.zeros((rows, columns), dtype=np.float32)
@@ -21,12 +22,14 @@ def read_data(file, columns):
             out[i] = np.fromstring(line.rstrip(), dtype=np.float32, sep=' ')
     return out
 
-# Fast way to get number of rows in textfile (props to Google)
+
+# Fast way to get number of rows in textfile
 def file_len(file):
     with open(file) as f:
         for i, l in enumerate(f):
             pass
     return i + 1
+
 
 # Could have implemented this in read_data with an if statement, but wanted to leave that pure for future use.
 # This function is very limited and only works when you only allow events where three partclies are being fired.
@@ -49,26 +52,24 @@ def main():
 
     # x is a placeholder, which means that it is something we need to provide each training iteration. We will use
     # x as a placeholder for the input data, i.e. the deposited energy in the crystal. Since we're using the XB
-    # detector, x gets 162 columns, one for each crystal. The -1 argument just denotes that our batch size, i.e.
+    # detector, x gets 162 columns, one for each crystal. The None argument just denotes that our batch size, i.e.
     # the number of rows of the data we provide as the placeholder, can vary. As you will see, the matrix algebra that will follow will not
-    # put any restrictions on the number of rows of x.
+    # put any restrictions on the number of rows of x so we as mentioned we can use the None argument to allow for diffirent batch sizes.
     x = tf.placeholder(dtype=tf.float32, shape=[None, 162])
     # y_ denotes the correct answer. Since we only allow events where 3 particles were fired in this tutorial,
     # y_ has 6 columns since each particle has an energy and a cos(theta). The batch size here can vary along with x
     # So we use None as the input for the number of rows.
-    # instead of 100.
     y_ = tf.placeholder(dtype=tf.float32, shape=[None, 6])
 
-    # Now we're going to make our first hidden layer. Let's use 256 nodes per layer. First need a weight matrix:
+    # Now we're going to make our first hidden layer. Let's use 256 nodes per layer. First we need a weight matrix:
     W1 = tf.Variable(tf.truncated_normal([162, 256], stddev=0.1), dtype=tf.float32)
     # We want all of the elements in this matrix to be updated during the training, and to signal that to tensorflow
     # you make it a Variable. The tf.truncated_normal([162, 256], stddev=0.1) input is just the initial value,
-    # and it's common to use normal distributed values will mean 0. Now we multiply x with W1:
+    # and it's common to use normal distributed values. Now we multiply x with W1:
     y1_tmp1 = tf.matmul(x, W1)
     # If we have a batch size of e.g. 100, y1_tmp will get the size 256x100. So we note that if we for example
     # would have had 50 instead of 100 as the batch size, we would've gotten a size of 256x50, so that's the
-    # reason why you can use None as the number of rows in the placeholers; the matrix algerbra works no matter
-    # the batch size.
+    # reason why you can use None as the number of rows in the placeholers.
     # We will also need a bias vector, where all elements also should be trainable (common to set the initial
     # elemnts to 1).
     b1 = tf.Variable(tf.ones([256]), dtype=tf.float32)
@@ -94,15 +95,17 @@ def main():
     # Now we need to determine what we want the training process to minimize, i.e. the cost function.
     # We use cost/loss interchangeably.
     # To not complicate this tutorial, we use a rather simple approach. We will try to  minimize the mean square
-    # error between the input and the output. More important is that we always want the first two output elements to
-    # represent the energy and cos(theta) of the particle with the loweset energy, the 3rd and the 4th output elements
-    # to energy and cos(theta) of the particle with the second lowest energy etc. To realise this, we simply
-    # have to make sure that we change the gun data after we import it, so the the particle energy is increasing.
+    # error between the input and the output. However, to give the network a fair chance of reconstructing the particle
+    # properties, we will provide the correct answer so that the info of the particle with the lowest energy always
+    # is the first in the list, and then the rest follow in increasing energy order. So the first two element in each row
+    # in the gun-dataset will be the energy and cos(theta) of the particle with the lowest energy, the 3rd and the 4th output elements
+    # to energy and cos(theta) of the particle with the second lowest energy etc. To implement this, we simply
+    # have to make sure that we change the gun data after we import it, so the the particle energy is in increasing order.
     # Just to be clear, WE NEVER USED THIS APPROACH FOR THE PLOTS IN THE REPORT, just wanted to keep things simple
     # here.
     loss = tf.reduce_mean(tf.square(tf.subtract(y_, y)))
 
-    # Now we have to decide HOW we wan't to minimize. One common method is the optimizer Adam:
+    # Now we have to decide HOW we wan't to minimize. One common method is the optimizer Adam with step length 1e-4:
     train_step = tf.train.AdamOptimizer(0.0001).minimize(loss)
 
     print('Reading and preparing data')
@@ -112,12 +115,13 @@ def main():
     # energies are first in order.
     det_data = read_data(sys.argv[1],162) # number of crystals on crystal ball
     gun_data = read_data(sys.argv[2],6) # only have 3 guns. Since we use data for both energy and angle, we get 6 columns
-
+    
+    # Here we fix the order
     gun_data= lowest_energy_first(gun_data)
 
     # We will want to use the majority of the data to train on, and then the remainder to evaluate on. Since
     # we won't change the network hyperparameters (e.g. nodes and layers) we don't need a third data set to
-    # evaluate on, ofter called the test set.
+    # evaluate on, often called the test set.
     det_data_train = det_data[0:int(0.8*len(det_data))]
     det_data_eval = det_data[int(0.8 * len(det_data)):]
     gun_data_train = gun_data[0:int(0.8 * len(gun_data))]
@@ -135,10 +139,11 @@ def main():
     loss_list_eval = []
     loss_list_train = []
 
+    # We use 5e4 training iterations here, but we sometimes went with over 1e6 in some cases in the project.
     iterations = int(5e4)
     for i in range(iterations):
         # here 100 randomly selected rows from the training set are extracted.
-        # It is usually advicable to keep the training batch small
+        # It is usually advisable to keep the training batch small
         x_batch, y_batch = gen_sub_set(100, det_data_train, gun_data_train)
         if i % 100 == 0: # don't want to save values at every training step
             # Usually one uses a bigger batch size when evaluating, since we don't train on based on the evaluation
@@ -162,7 +167,7 @@ def main():
         sess.run(train_step, feed_dict={x: x_batch, y_: y_batch})
 
     # Now we have finished training the network. Since the training process is stochastic, the last step
-    # could have resulted in a network that is much worse than most of the networks from the previous 100 steps
+    # could have resulted in a network that is worse than most of the networks from the previous 100 steps
     # for example. So if you're picky it's probably unwise to just select the last network, but we won't bother with
     # that in this tutorial.
 
@@ -183,14 +188,14 @@ def main():
     gun_data_from_network = sess.run(y, feed_dict={x: det_data_eval})
     # Here the particle energies are extracted from the data recontructed by the network. We only plot the energies
     # in this tutorial
-    energy_data_from_network = []
+    reconstructed_energy_data_from_network = []
     for i in range(len(gun_data_from_network)):
         for j in range(int(len(gun_data_from_network[0])/2)):
-            energy_data_from_network.append(gun_data_from_network[i][2*j])
+            reconstructed_energy_data_from_network.append(gun_data_from_network[i][2*j])
     energy_data_correct = gun_data_eval[:, [0, 2, 4]].flatten().tolist()
 
     # 2d histogram, density plot, reconstructed vs correct energies
-    h = ax[1].hist2d(energy_data_correct, energy_data_from_network, bins=int(np.sqrt(len(energy_data_from_network) / 2)), norm=LogNorm())
+    h = ax[1].hist2d(energy_data_correct, reconstructed_energy_data_from_network , bins=int(np.sqrt(len(reconstructed_energy_data_from_network) / 2)), norm=LogNorm())
     ax[1].plot([0, 10], [0, 10], 'r')
     ax[1].set(xlabel='Gun energy (MeV)', ylabel='Predicted energy (MeV)')
     ax[1].set_title('Density plot of reconstructed vs correct energies')
