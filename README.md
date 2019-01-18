@@ -8,7 +8,7 @@ For an overview on how to use the repository, see the Kandidat19_Komma_ig_ng.pdf
 
 DataGeneration - Contains necessary scripts to extract data for the neural networks from root files into text files.
 
-FinalizedPythonPrograms - Contains programs that was used in the end of our project used to generate the results in the report.
+FinalizedPythonPrograms - Contains programs that was used in the end of our project to generate the results in the report.
                           We do not guarantee any user-friendly experience in this directory.
 
 Kebnekaise - Contains scripts on how to submit python scripts utilizing TensorFlow to the computing centre Kebnekaise.
