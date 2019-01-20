@@ -9,7 +9,7 @@ For an overview on how to use the repository, see the Kandidat19_Komma_ig_ng.pdf
 DataGeneration - Contains necessary scripts to extract data for the neural networks from root files into text files.
 
 FinalizedScriptsAndPrograms - Contains programs that was used in the end of our project to generate the results in the report.
-                          We do not guarantee any user-friendly experience in this directory. **Will be updated with more programs /2019-01-20)**
+                          We do not guarantee any user-friendly experience in this directory. **Will be updated with more programs soon /2019-01-20)**
 
 Kebnekaise - Contains scripts on how to submit scripts to the computing centre Kebnekaise.
 
