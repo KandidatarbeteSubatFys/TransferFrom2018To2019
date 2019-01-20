@@ -1,3 +1,9 @@
 These files can be used to create function fits to the data reconstructed by the neural network and by the add back routine.
 
 They also calculate the signal to background ratios for each energy peak.
+
+All this has to be done after xb_analyse has been run.
+
+Please note that the files are supposed to be modified to your current requirements.
+It is probable that they can (unfortunately) not be used without any modifications.
+For example: histogram names in addback_figs.C has to match those of xb_analyse.C.
