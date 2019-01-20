@@ -7,3 +7,5 @@ All this has to be done after xb_analyse has been run.
 Please note that the files are supposed to be modified to your current requirements.
 It is probable that they can (unfortunately) not be used without any modifications.
 For example: histogram names in addback_figs.C has to match those of xb_analyse.C.
+
+Included is an example of how a modified version of xb_analyse.C looks like.
