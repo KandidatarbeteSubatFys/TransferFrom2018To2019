@@ -1,1 +1,3 @@
 These files can be used to create function fits to the data reconstructed by the neural network and by the add back routine.
+
+They also calculate the signal to background ratios for each energy peak.
