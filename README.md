@@ -13,5 +13,7 @@ FinalizedPythonPrograms - Contains programs that was used in the end of our proj
 
 Kebnekaise - Contains scripts on how to submit scripts to the computing centre Kebnekaise.
 
+RealisticData - Contains a script that we used to simulate realistic data in ggland to evalute the performance of our ANN on.
+
 Tutorials - Contains two tutorial which consists of pdf documents as well as python scripts. The "general tutorial" starts from the
 beginning with data generation, and finishes with a complete (yet simple) network.
