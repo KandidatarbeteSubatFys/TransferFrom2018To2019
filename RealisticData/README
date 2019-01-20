@@ -1,0 +1,9 @@
+The scripts shows an example on how to set up ggland in order to simulate "realistic" data to be used in comparison with addback.
+
+Running this script starts a simulation where every event consists of
+
+  - one gamma with energy EGAMMA MeV (in boosted frame), emitted with probability 0.1 from a beam with beta = 0.6 - 0.7 (primary)
+  - one gamma with energy 0.05 - 1 MeV (in lab frame), emitted with probability 0.5 from rest (secondary/background)
+  - one gamma with energy 0.05 - 2 MeV (in lab frame), emitted with probability 0.5 from rest (secondary/background)
+  
+When finished data is stored in a root file in specified directory DATADIR
