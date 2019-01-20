@@ -1,4 +1,4 @@
-The scripts shows an example on how to set up ggland in order to simulate "realistic" data to be used in comparison with addback.
+The script xb_cases.sh shows an example on how to set up ggland in order to simulate "realistic" data to be used in comparison with addback.
 
 Running this script starts a simulation where every event consists of
 
