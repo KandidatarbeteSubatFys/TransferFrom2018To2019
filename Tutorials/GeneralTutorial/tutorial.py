@@ -5,7 +5,7 @@ import sys # used for taking arguments when running script
 from matplotlib.colors import LogNorm # useful norm for density plots
 
 
-# Return a randomly selected subset of batch_x and batch_y with length batch_size.
+# Returns a randomly selected subset of batch_x and batch_y with length batch_size.
 def gen_sub_set(batch_size, batch_x, batch_y):
     if not len(batch_x) == len(batch_y):
         raise ValueError('Lists most be of same length')
@@ -38,10 +38,10 @@ def file_len(file):
 def lowest_energy_first(gun_data):
     for i, row in enumerate(gun_data):
         reshaped_row = row.reshape((-1,2))
-        reshaped_sorted_row = reshaped_row[reshaped_row[:, 1].argsort()]
-        sorted_row = reshaped_sorted_row.reshape((1,-1))
+        reshaped_sorted_row = reshaped_row[reshaped_row[:, 0].argsort()]
+        sorted_row = reshaped_sorted_row.flatten()
         gun_data[i] = sorted_row
-    return gun_data
+    return gun_data.copy()
 
 
 
@@ -53,16 +53,16 @@ def main():
     # x is a placeholder, which means that it is something we need to provide each training iteration. We will use
     # x as a placeholder for the input data, i.e. the deposited energy in the crystal. Since we're using the XB
     # detector, x gets 162 columns, one for each crystal. The None argument just denotes that our batch size, i.e.
-    # the number of rows of the data we provide as the placeholder, can vary. As you will see, the matrix algebra that will 
-    # follow will not put any restrictions on the number of rows of x so we as mentioned we can use the None argument to allow
-    # for diffirent batch sizes.
+    # the number of rows of the data we provide as the placeholder, can vary. As you will see, the matrix algebra that
+    # will follow will not put any restrictions on the number of rows of x so we as mentioned we can use the None
+    # argument to allow for diffirent batch sizes.
     x = tf.placeholder(dtype=tf.float32, shape=[None, 162])
     # y_ denotes the correct answer. Since we only allow events where 3 particles were fired in this tutorial,
     # y_ has 6 columns since each particle has an energy and a cos(theta). The batch size here can vary along with x
     # So we use None as the input for the number of rows.
     y_ = tf.placeholder(dtype=tf.float32, shape=[None, 6])
 
-    # Now we're going to make our first hidden layer. Let's use 256 nodes for the layer. First we need a weight matrix:
+    # Now we're going to make our first hidden layer. Let's use 256 nodes per layer. First we need a weight matrix:
     W1 = tf.Variable(tf.truncated_normal([162, 256], stddev=0.1), dtype=tf.float32)
     # We want all of the elements in this matrix to be updated during the training, and to signal that to tensorflow
     # you make it a Variable. The tf.truncated_normal([162, 256], stddev=0.1) input is just the initial value,
@@ -106,7 +106,8 @@ def main():
     # here.
     loss = tf.reduce_mean(tf.square(tf.subtract(y_, y)))
 
-    # Now we have to decide how we want to do the optimization. One common method is the optimizer Adam with step length 1e-4:
+    # Now we have to decide how we want to do the optimization. One common method is the optimizer Adam with step
+    # length 1e-4:
     train_step = tf.train.AdamOptimizer(0.0001).minimize(loss)
 
     print('Reading and preparing data')
@@ -114,19 +115,19 @@ def main():
     # Before we actually train our variables W and b to produce a suitable network, we need to import some data to
     # train on. Remember that we need to change the order in the gun data so that the particles with the lowest
     # energies are first in order.
-    det_data = read_data(sys.argv[1],162) # number of crystals on crystal ball is 162
+    det_data = read_data(sys.argv[1],162) # the number of crystals on crystal ball is 162
     gun_data = read_data(sys.argv[2],6) # only have 3 guns. Since we use data for both energy and angle, we get 6 columns
-    
+
     # Here we fix the order
-    gun_data= lowest_energy_first(gun_data)
+    gun_data_ordered= lowest_energy_first(gun_data)
 
     # We will want to use the majority of the data to train on, and then the remainder to evaluate on. Since
     # we won't change the network hyperparameters (e.g. nodes and layers) we don't need a third data set to
     # evaluate on, often called the test set.
     det_data_train = det_data[0:int(0.8*len(det_data))]
     det_data_eval = det_data[int(0.8 * len(det_data)):]
-    gun_data_train = gun_data[0:int(0.8 * len(gun_data))]
-    gun_data_eval = gun_data[int(0.8 * len(gun_data)):]
+    gun_data_train = gun_data_ordered[0:int(0.8 * len(gun_data_ordered))]
+    gun_data_eval = gun_data_ordered[int(0.8 * len(gun_data_ordered)):]
 
 
 
@@ -136,7 +137,7 @@ def main():
     sess = tf.Session()
     sess.run(tf.global_variables_initializer())
 
-    # We will store values of the cost function as the training progresses
+    # will store values of the cost function as the training progresses
     loss_list_eval = []
     loss_list_train = []
 
@@ -185,10 +186,10 @@ def main():
     ax[0].set(ylabel='Loss function (MeV)^2', xlabel='Iteration')
     ax[0].set_title('Evaluation cost function (orange) vs training cost function (blue)')
 
-    # Reconstruct events by plugging in all of the evaluation data into the network:
+    # Reconstruction the evaluation data set by using the network:
     gun_data_from_network = sess.run(y, feed_dict={x: det_data_eval})
-    # Here the particle energies are extracted from the data recontructed by the network, since we only plot the energies
-    # in this tutorial:
+    # Here the particle energies are extracted from the data recontructed by the network, sice only plot the energies
+    # in this tutorial
     reconstructed_energy_data_from_network = []
     for i in range(len(gun_data_from_network)):
         for j in range(int(len(gun_data_from_network[0])/2)):
