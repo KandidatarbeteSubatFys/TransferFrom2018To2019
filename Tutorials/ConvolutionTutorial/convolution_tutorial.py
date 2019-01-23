@@ -24,7 +24,7 @@ def read_data(file, columns):
     return out
 
 
-# Fast way to get number of rows in textfile (props to Google)
+# Fast way to get number of rows in textfile 
 def file_len(file):
     with open(file) as f:
         for i, l in enumerate(f):
@@ -39,13 +39,13 @@ def file_len(file):
 def lowest_energy_first(gun_data):
     for i, row in enumerate(gun_data):
         reshaped_row = row.reshape((-1,2))
-        reshaped_sorted_row = reshaped_row[reshaped_row[:, 1].argsort()]
-        sorted_row = reshaped_sorted_row.reshape((1,-1))
+        reshaped_sorted_row = reshaped_row[reshaped_row[:, 0].argsort()]
+        sorted_row = reshaped_sorted_row.flatten()
         gun_data[i] = sorted_row
-    return gun_data
+    return gun_data.copy()
 
 # This function we use for the weighting when doing convolution. x is the input and W is the weight matrix.
-# The W matrix will stride across x with step length 1 in all 4 directions except in the y direction where the stride is 7 
+# The W matrix will stride across x with step length 1 in all 4 directions except in the y direction where the stride is 7
 # (stride input is [stride_length_in_z, stride_length_in_x, stride_length_in_y, stride_length_in_channels], but was a while
 # since I did this so double check meaning of dimension 1 and 4 (they will both be one here anyway so a mix up doesn't
 # matter here)).
@@ -175,8 +175,8 @@ def main():
     # you make it a Variable. The tf.truncated_normal([162*16, 256], stddev=0.1) input is just the initial value,
     # and it's common to use normal distributed values will mean 0. Now we multiply x with W1:
     y1_tmp1 = tf.matmul(from_conv, W1)
-    # If we have a batch size of e.g. 100, y1_tmp will get the size 256x100. So we note that if we for example
-    # would have had 50 instead of 100 as the batch size, we would've gotten a size of 256x50, so that's the
+    # If we have a batch size of e.g. 100, y1_tmp will get the size 100x256. So we note that if we for example
+    # would have had 50 instead of 100 as the batch size, we would've gotten a size of 50x256, so that's the
     # reason why you can use None as the number of rows in the placeholers.
     # We will also need a bias vector, where all elements also should be trainable (common to set the initial
     # elemnts to 1).
@@ -223,7 +223,7 @@ def main():
     # energies are first in order.
     det_data = read_data(sys.argv[1],162) # number of crystals on crystal ball
     gun_data = read_data(sys.argv[2],6) # only have 3 guns. Since we use data for both energy and angle, we get 6 columns
-
+    
     gun_data= lowest_energy_first(gun_data)
 
     # We will want to use the majority of the data to train on, and then the remainder to evaluate on. Since
