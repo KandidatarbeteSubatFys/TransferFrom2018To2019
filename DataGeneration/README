@@ -8,10 +8,10 @@ The text file will be formatted with space delimiter and with every row correspo
 row is the deposited energy in crystal with index number one, the second data point in each row is the deposited energy in
 crystal with index number two etc.
 
-The XB_gun_vals.txt file contain information about the energy and the direction (cosine of angle from the beam pipe or cos(theta)),
-thus this file contains the correct answer that you wish to reconstruct using the data in the XB_det_data.txt file. Each row
-contains the information for each event, and the data is formatted with space delimiter and the energy and cos(theta) for each
-particle are printed in pairs. Thus for an event with two particles, called 1, 2 and 3, the output would be:
+The XB_gun_vals.txt file contain information about the energy and the direction (cosine of angle from the beam pipe or cos(theta)).
+So this file contains the correct answer that you wish to reconstruct using the data in the XB_det_data.txt file. Each row
+contains the information for one event, and the data is formatted with space delimiter and the energy and cos(theta) for each
+particle are printed in pairs. Thus for an event with three particles, called 1, 2 and 3, the output would be:
 E_1 cos(theta_1) E_2 cos(theta_2) E_3 cos(theta_3).
 
 The XB_sum_of_dep_energies.txt file just contain the total deposited energy for each event, i.e. each row in this file is just
